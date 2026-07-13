@@ -1,0 +1,58 @@
+const MONTH_TARGETS=[{fyp:25,size:2,active:1,reward:8},{fyp:35,size:3,active:2,reward:8},{fyp:45,size:4,active:2,reward:8},{fyp:45,size:5,active:2,reward:5},{fyp:50,size:6,active:3,reward:5},{fyp:50,size:6,active:3,reward:5}];
+const savedAdvisors=localStorage.getItem('ttn-advisors');
+let advisors=JSON.parse(savedAdvisors||'[]');
+let editingAdvisor=null;
+const DEFAULT_FYP=15;
+while(advisors.length<6)advisors.push({id:crypto.randomUUID(),name:`TVV ${advisors.length+1}`,months:Array.from({length:6},()=>({fyp:0,trained:true,cancelled:false}))});
+if(advisors.length>6)advisors=advisors.slice(0,6);
+if(!savedAdvisors)advisors[0].months[0].fyp=DEFAULT_FYP;
+localStorage.setItem('ttn-advisors',JSON.stringify(advisors));
+const money=n=>`${new Intl.NumberFormat('vi-VN',{maximumFractionDigits:1}).format(n)} triệu`;
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function addAdvisor(){openAdvisorDialog()}
+function save(){localStorage.setItem('ttn-advisors',JSON.stringify(advisors))}
+function tvvMonthReward(a,i){const x=a.months[i],f=x.cancelled?0:(x.fyp||0);if(!f)return 0;let base=i<3?(f>=12?1:0):(f>=12?(x.trained?1:.5):0);let challenge=0;if(i===0&&f>=50)challenge=x.trained?3:3;else if(i>=1&&i<=3&&f>=50)challenge=x.trained?3:1.5;return base+challenge}
+function calculate(){
+  let monthly=[],management=0,companion=0,outstanding=0,tvvTotal=0,cumFyp=0;
+  for(let i=0;i<6;i++){
+    const fyp=advisors.reduce((s,a)=>s+(a.months[i].cancelled?0:(+a.months[i].fyp||0)),0), active=advisors.filter(a=>!a.months[i].cancelled&&(+a.months[i].fyp||0)>0).length, size=advisors.length;
+    const advisorRewards=advisors.reduce((s,a)=>s+tvvMonthReward(a,i),0);tvvTotal+=advisorRewards;cumFyp+=fyp;
+    const t=MONTH_TARGETS[i],hit=fyp>=t.fyp&&size>=t.size&&active>=t.active;let mgmt=hit?t.reward:0;
+    if(i===2&&cumFyp>=100&&size>=4&&active>=2)mgmt=Math.max(mgmt,24-management);
+    if(i===5&&cumFyp>=250&&size>=6&&active>=3)mgmt=Math.max(mgmt,39-management);
+    management+=mgmt;
+    const comp=active===1?advisorRewards:active>=2?advisorRewards*2:0;
+    const out=active>=2?advisors.reduce((s,a)=>{const f=a.months[i].cancelled?0:a.months[i].fyp;return s+(f>=45?5:f>=35?3:0)},0):0;
+    companion+=comp;outstanding+=out;monthly.push({fyp,active,size,advisorRewards,mgmt,comp,out,hit,target:t});
+  }
+  return{monthly,management,companion,outstanding,tvvTotal,ttnTotal:management+companion+outstanding,totalFyp:cumFyp};
+}
+function nextMilestones(i,m){
+  const rows=[],t=m.target;
+  if(!m.hit){const gaps=[];if(m.fyp<t.fyp)gaps.push(`thêm ${t.fyp-m.fyp} triệu FYP`);if(m.size<t.size)gaps.push(`thêm ${t.size-m.size} TVV`);if(m.active<t.active)gaps.push(`thêm ${t.active-m.active} TVV có HĐ`);rows.push({name:'QL khởi nghiệp',need:gaps.join(' · '),delta:t.reward})}
+  if(m.active<2){const assumedNewReward=1,newRewardTotal=m.advisorRewards+assumedNewReward,newComp=m.active===0?newRewardTotal:newRewardTotal*2;rows.push({name:'Đồng hành',need:m.active===0?'Có 1 TVV mới':'Đạt 2 TVV mới · tỷ lệ 200%',delta:Math.max(0,newComp-m.comp)})}
+  let best=null;
+  advisors.forEach(a=>{const f=a.months[i].cancelled?0:(+a.months[i].fyp||0);if(f>0&&f<45){const target=f<35?35:45,deltaReward=f<35?3:2,gap=target-f;if(!best||gap<best.gap)best={gap,delta:deltaReward,target,name:a.name}}});
+  if(best)rows.push({name:'Vượt trội',need:`${best.name} thêm ${best.gap} triệu FYP để đạt ${best.target}`,delta:best.delta});
+  if(!rows.length)return'';const total=rows.reduce((s,r)=>s+r.delta,0);return `<details class="next-step"><summary><span><small>MỐC TIẾP THEO</small><b>Có thể tăng thêm ${money(total)}</b></span><i>＋</i></summary><div class="next-step-body">${rows.map(r=>`<div><span><b>${r.name}</b><small>${r.need}</small></span><strong>+${money(r.delta)}</strong></div>`).join('')}<div class="next-total"><span>Tổng thưởng TTN tăng thêm</span><strong>+${money(total)}</strong></div></div></details>`}
+function render(){
+  const list=document.querySelector('#advisorList');
+  list.innerHTML=`<div class="advisor-matrix"><div class="matrix-corner">THÁNG</div>${advisors.map((a,ai)=>`<button class="tvv-column-head" onclick="openAdvisorDialog(${ai})"><span>${ai+1}</span><b>${esc(a.name)}</b><small>Sửa</small></button>`).join('')}${Array.from({length:6},(_,mi)=>`<div class="month-name"><small>THÁNG</small><b>${mi+1}</b></div>${advisors.map((a,ai)=>{const m=a.months[mi],off=m.fyp<=0||m.cancelled;return `<button class="matrix-month ${off?'inactive':''}" onclick="toggleMatrixCell(${ai},${mi})" aria-label="${off?'Bật':'Tắt'} hợp đồng ${a.name} tháng ${mi+1}"><b>${off?'＋':new Intl.NumberFormat('vi-VN',{maximumFractionDigits:1}).format(m.fyp)}</b></button>`}).join('')}`).join('')}</div>`;
+  const c=calculate();
+  document.querySelector('#monthCards').innerHTML=c.monthly.map((m,i)=>{const total=m.mgmt+m.comp+m.out;const rate=m.active===1?'100%':m.active>=2?'200%':'0%';return `<details class="month-row ${m.hit?'hit':''}"><summary><span><small>THÁNG</small><b>${i+1}</b></span><span class="month-contract"><small>HỢP ĐỒNG</small><b>${m.active} TVV · ${m.fyp} triệu</b></span><span class="month-total"><small>THƯỞNG TTN</small><b>${money(total)}</b></span><i>⌄</i></summary><div class="month-detail"><button class="reward-poster reference-reward" onclick="openPoster('Thưởng TVV mới.png','Thưởng TVV mới')"><span>Thưởng TVV mới <small>(khoản của TVV)</small></span><b>${money(m.advisorRewards)}</b><i>›</i></button><button class="reward-poster" onclick="openPoster('Thưởng đồng hành + Vượt trội.png','Thưởng Đồng hành & Vượt trội')"><span>Đồng hành <small>(${rate} thưởng TVV mới)</small></span><b>${money(m.comp)}</b><i>›</i></button><button class="reward-poster" onclick="openPoster('Quản lý khởi nghiệp.png','Quản lý khởi nghiệp')"><span>QL khởi nghiệp</span><b>${money(m.mgmt)}</b><i>›</i></button><button class="reward-poster" onclick="openPoster('Thưởng đồng hành + Vượt trội.png','Thưởng Đồng hành & Vượt trội')"><span>Vượt trội</span><b>${money(m.out)}</b><i>›</i></button><div class="progress-alert"><span>Tiến độ FYP</span><b>${m.fyp}/${m.target.fyp} triệu</b></div><div class="progress-alert"><span>Quy mô / yêu cầu</span><b>${m.size}/${m.target.size}</b></div>${nextMilestones(i,m)}</div></details>`}).join('');
+  const vals={totalFyp:c.totalFyp,advisorCount:advisors.length,ttnTotal:c.ttnTotal,tvvTotal:c.tvvTotal};
+  Object.entries(vals).forEach(([id,v])=>document.querySelector('#'+id).textContent=['advisorCount','totalFyp'].includes(id)?new Intl.NumberFormat('vi-VN').format(v):money(v));
+}
+window.updateName=(i,v)=>{advisors[i].name=v;save()};window.updateFyp=(i,m,v)=>{const n=String(v).replace(/\s/g,'').replace(',','.').replace(/[^0-9.]/g,'');advisors[i].months[m].fyp=Math.max(0,parseFloat(n)||0);save()};window.updateTraining=(i,m,v)=>{advisors[i].months[m].trained=v;save();render()};window.removeAdvisor=i=>{advisors.splice(i,1);save();render()};
+window.toggleCancelled=(i,m,value)=>{advisors[i].months[m].cancelled=value;save();render()};
+window.activateContract=(i,m)=>{const month=advisors[i].months[m];month.fyp=month.fyp>0?month.fyp:DEFAULT_FYP;month.trained=true;month.cancelled=false;save();render()};
+window.toggleMatrixCell=(i,m)=>{const month=advisors[i].months[m];if(month.fyp>0&&!month.cancelled)month.cancelled=true;else{month.fyp=month.fyp>0?month.fyp:DEFAULT_FYP;month.trained=true;month.cancelled=false}save();render()};
+window.openAdvisorDialog=function(index=null){editingAdvisor=index;const a=index===null?{name:`TVV ${advisors.length+1}`,months:Array.from({length:6},()=>({fyp:0,trained:true}))}:advisors[index];document.querySelector('#dialogTitle').textContent=index===null?'Thêm TVV':'Cập nhật TVV';document.querySelector('#dialogName').value=a.name;document.querySelector('#dialogMonths').innerHTML=a.months.map((m,i)=>{const active=m.fyp>0&&!m.cancelled,reward=active?tvvMonthReward(a,i):0,commission=active?m.fyp*.3:0;return `<div class="contract-toggle"><label><input class="dialog-contract" type="checkbox" ${active?'checked':''} onchange="toggleContractFyp(this);updateSelectAllButton()"><span><small>THÁNG ${i+1}</small></span></label><div class="contract-fyp"><input type="text" inputmode="decimal" value="${m.fyp>0?m.fyp:DEFAULT_FYP}" ${active?'':'disabled'} oninput="updateDialogMonthReward(this)"><span>triệu</span></div><div class="dialog-reward"><span>Thưởng TVV</span><b>${money(reward)}</b></div><div class="dialog-commission"><span>Hoa hồng 30% FYP</span><b>${money(commission)}</b></div></div>`}).join('');updateSelectAllButton();document.querySelector('#advisorDialog').showModal()};
+window.updateDialogMonthReward=element=>{const cell=element.closest('.contract-toggle'),i=[...document.querySelectorAll('.contract-toggle')].indexOf(cell),checked=cell.querySelector('.dialog-contract').checked,fyp=parseFloat(cell.querySelector('.contract-fyp input').value.replace(',','.'))||0,temp={months:Array.from({length:6},(_,mi)=>({fyp:mi===i&&checked?fyp:0,trained:true,cancelled:false}))};cell.querySelector('.dialog-reward b').textContent=money(tvvMonthReward(temp,i));cell.querySelector('.dialog-commission b').textContent=money(checked?fyp*.3:0)};
+window.toggleContractFyp=checkbox=>{const cell=checkbox.closest('.contract-toggle'),input=cell.querySelector('.contract-fyp input');input.disabled=!checkbox.checked;if(checkbox.checked){if(!parseFloat(input.value))input.value=DEFAULT_FYP;input.focus();input.select()}updateDialogMonthReward(input)};
+window.updateSelectAllButton=function(){const boxes=[...document.querySelectorAll('.dialog-contract')];document.querySelector('#selectAllMonths').textContent=boxes.length&&boxes.every(x=>x.checked)?'Bỏ tất cả':'Tất cả'};
+document.querySelector('#selectAllMonths').onclick=()=>{const boxes=[...document.querySelectorAll('.dialog-contract')],select=!boxes.every(x=>x.checked);boxes.forEach(box=>{box.checked=select;const input=box.closest('.contract-toggle').querySelector('.contract-fyp input');input.disabled=!select;if(select&&!parseFloat(input.value))input.value=DEFAULT_FYP;updateDialogMonthReward(input)});updateSelectAllButton()};
+window.openPoster=(file,title)=>{document.querySelector('#posterTitle').textContent=title;document.querySelector('#posterImage').src=file;document.querySelector('#posterDialog').showModal()};
+document.querySelector('#closePoster').onclick=()=>document.querySelector('#posterDialog').close();document.querySelector('#posterDialog').onclick=e=>{if(e.target===e.currentTarget)e.currentTarget.close()};
+const closeAdvisorDialog=()=>document.querySelector('#advisorDialog').close();document.querySelector('#closeDialog').onclick=closeAdvisorDialog;document.querySelector('#cancelDialog').onclick=closeAdvisorDialog;document.querySelector('#advisorForm').onsubmit=e=>{e.preventDefault();const months=[...document.querySelectorAll('.contract-toggle')].map(x=>{const checked=x.querySelector('.dialog-contract').checked,value=x.querySelector('.contract-fyp input').value.replace(',','.');return{fyp:checked?Math.max(0,parseFloat(value)||DEFAULT_FYP):0,trained:true,cancelled:false}});const data={id:editingAdvisor===null?crypto.randomUUID():advisors[editingAdvisor].id,name:document.querySelector('#dialogName').value.trim()||`TVV ${advisors.length+1}`,months};if(editingAdvisor===null)advisors.push(data);else advisors[editingAdvisor]=data;save();closeAdvisorDialog();render()};
+document.querySelector('#resetBtn').onclick=()=>{if(confirm('Đưa bảng về trạng thái mặc định?')){advisors.forEach((a,ai)=>a.months.forEach((m,mi)=>{m.fyp=ai===0&&mi===0?DEFAULT_FYP:0;m.trained=true;m.cancelled=false}));save();render()}};render();
