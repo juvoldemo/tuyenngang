@@ -63,3 +63,74 @@ html{background:#eaf0f9}body{background:linear-gradient(180deg,#fff 0,#f8fbff 10
 .month-detail .progress-alert{padding-right:19px}.month-detail .progress-alert>span,.month-detail .progress-alert>b{color:#e53935}
 .contract-toggle{grid-template-rows:auto auto}.dialog-reward{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-top:2px;padding-top:7px;border-top:1px solid #e4ebf6}.dialog-reward span{font-size:9px;color:#667693}.dialog-reward b{font-size:12px;color:#12a150}
 .dialog-commission{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding-top:5px}.dialog-commission span{font-size:9px;color:#667693}.dialog-commission b{font-size:12px;color:#1769f7}
+.dialog-productivity,.dialog-quarter,.dialog-annual{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding-top:5px}.dialog-productivity span,.dialog-quarter span,.dialog-annual span{font-size:9px;color:#667693}.dialog-productivity b,.dialog-quarter b,.dialog-annual b{font-size:12px}.dialog-productivity b{color:#ef7a18}.dialog-quarter{margin-top:2px;border-top:1px dashed #d8e2f1}.dialog-quarter b{color:#7a3bd1}.dialog-annual{margin-top:2px;border-top:1px dashed #f0cf8e}.dialog-annual b{color:#d86400}
+.dialog-total{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-top:4px;padding:8px 7px;border-top:2px solid #b9d3ff;border-radius:7px;background:#edf4ff}.dialog-total span{font-size:9px;font-weight:800;color:#27436f}.dialog-total b{font-size:13px;color:#075cf2}
+
+/* Lộ trình 18 tháng và thăng tiến Trưởng nhóm */
+.promotion-status{max-width:1180px;margin:0 auto 14px;padding:18px 20px;display:flex;align-items:center;gap:15px;border:1px solid #cddcff;border-radius:16px;background:linear-gradient(135deg,#f1f6ff,#fff);box-shadow:0 7px 20px #385d8e12}.promotion-status.promoted{border-color:#a9e0bd;background:linear-gradient(135deg,#effcf4,#fff)}.promotion-icon{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#438eff,#175be9);color:#fff;font-size:22px;box-shadow:0 5px 14px #1769f733}.promotion-status.promoted .promotion-icon{background:linear-gradient(135deg,#42d77d,#079c48)}.promotion-status small{font-size:9px;font-weight:900;letter-spacing:1.2px;color:#1769f7}.promotion-status.promoted small{color:#079c48}.promotion-status h3{margin:2px 0 3px;font-size:18px;color:#10214c}.promotion-status p{margin:0;color:var(--muted);font-size:12px}.promotion-perks{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}.promotion-perks span{padding:5px 9px;border-radius:999px;background:#dcf7e6;color:#087a3a;font-size:10px;font-weight:800}.matrix-help{margin:10px 0 0;color:var(--muted);font-size:11px}.advisor-list{overflow-x:auto;padding-bottom:7px}.advisor-matrix{width:max(100%,calc(48px + var(--advisor-count) * 74px));grid-template-columns:48px repeat(var(--advisor-count),minmax(74px,1fr))}.month-row.leader{border-color:#9edbb5!important;box-shadow:0 4px 13px #0d9d4914}.month-row.leader>summary{background:linear-gradient(90deg,#f0fcf4,#fff)}.month-row.leader summary>span:first-child b{background:linear-gradient(135deg,#48d980,#079c48)}.reward-line>span{display:flex;flex-direction:column;gap:1px}.reward-line>span small{font-size:9px;color:var(--muted)}.reward-line>b{color:#12a150;white-space:nowrap}.advisor-dialog form{max-height:92vh;overflow-y:auto}.dialog-months{max-height:57vh;overflow-y:auto}
+
+@media(max-width:800px){.promotion-status{margin:10px 12px;padding:14px}.promotion-status h3{font-size:16px}.promotion-status p{font-size:11px}.promotion-icon{width:40px;height:40px;flex-basis:40px}.advisor-matrix{width:calc(48px + var(--advisor-count) * 66px);grid-template-columns:48px repeat(var(--advisor-count),66px)}}
+.add-advisor{padding:10px 13px;border:0;border-radius:9px;background:linear-gradient(135deg,#3289ff,#1259ee);box-shadow:0 5px 12px #1769f733;white-space:nowrap}.dialog-actions .delete-advisor{margin-right:auto;background:#fff0f0;color:#d52c2c}.delete-advisor[hidden]{display:none}
+.advisor-list{overflow-x:auto}.advisor-matrix{width:100%;min-width:calc(48px + var(--advisor-count) * 50px);grid-template-columns:48px repeat(var(--advisor-count),minmax(50px,1fr))}.month-expander{width:100%;margin-top:9px;padding:11px;border:1px dashed #9bbcff;border-radius:10px;background:#f5f8ff;color:#1769f7;font-size:12px;font-weight:800;cursor:pointer}.month-expander span{display:inline-grid;place-items:center;width:22px;height:22px;margin-right:5px;border-radius:50%;background:#1769f7;color:#fff;font-size:16px}.month-expander:hover{background:#eaf2ff}
+.month-detail .promotion-gift{display:grid!important;grid-template-columns:minmax(0,1fr) auto 12px;align-items:center;gap:7px}.promotion-gift>span{display:flex;flex-direction:column;gap:1px}.promotion-gift>b{color:#12a150;white-space:nowrap}.promotion-gift>i{display:block;width:12px}
+
+/* Khối tiến độ/thăng tiến và ba mục tiêu độc lập */
+.promotion-status{display:block;text-align:center;padding:20px 14px}.promotion-heading{max-width:680px;margin:0 auto}.promotion-heading .promotion-icon{margin:0 auto 9px}.promotion-heading>small{display:block;margin-bottom:3px;letter-spacing:1.5px}.promotion-heading h3{margin:0;font-size:20px}.promotion-heading p{margin-top:5px}.promotion-goals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:900px;margin:17px auto 0}.goal-card{position:relative;min-width:0;padding:13px 7px 12px;border:1px solid #dce6f5;border-top:4px solid #398bff;border-radius:11px;background:#fff;box-shadow:0 5px 14px #315d9410;overflow:hidden}.promotion-status .goal-card small{display:block;color:#3974d7;font-size:8px;letter-spacing:.8px}.goal-card strong{display:flex;align-items:baseline;justify-content:center;gap:3px;margin:6px 0 2px;color:#1459e8;font-size:21px;line-height:1}.goal-card strong em{font-size:9px;font-style:normal;color:#7c8ba2}.goal-card b{display:block;color:#17264a;font-size:10px}.goal-card>span{display:block;margin-top:8px;padding:5px 4px;border-radius:6px;background:#f0f4fb;color:#718096;font-size:8px;font-weight:700;line-height:1.25}.goal-card.met>span{background:#e3f8eb;color:#07833d}.fyp-goal{border-top-color:#ff8a28}.promotion-status .fyp-goal small,.fyp-goal strong{color:#e96b12}.contract-goal{border-top-color:#8749ed}.promotion-status .contract-goal small,.contract-goal strong{color:#7032d4}.promotion-perks{justify-content:center;margin-top:14px}.promotion-perks span{padding:7px 11px;border:1px solid #bde8cd;background:#e5f8ec;font-size:9px}
+
+/* Bố cục PC: chỉ áp dụng cho màn hình lớn, không thay đổi giao diện mobile. */
+@media(min-width:801px){
+  html{background:#eaf0f9}
+  body{width:100%;max-width:none;min-height:100vh;margin:0!important;box-shadow:none}
+  .topbar{width:100%;height:76px;padding:0 32px;border-radius:0 0 20px 20px}
+  main{width:100%;padding-bottom:1px}
+  .stats,.promotion-status,.workspace,.results{width:calc(100% - 64px);max-width:none;margin-left:32px;margin-right:32px}
+  .stats{margin-top:24px;margin-bottom:18px;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  .stats article,.stats article.accent{min-height:118px;padding:18px}
+  .promotion-status{width:min(1100px,calc(100% - 64px));margin:0 auto 24px;padding:28px 34px}
+  .promotion-heading h3{font-size:25px}
+  .promotion-heading p{font-size:13px}
+  .promotion-heading .promotion-icon{width:58px;height:58px;font-size:27px}
+  .promotion-goals{gap:16px;margin-top:22px}
+  .goal-card{padding:18px 14px 16px;border-radius:14px}
+  .promotion-status .goal-card small{font-size:9px}
+  .goal-card strong{font-size:29px;margin:9px 0 5px}
+  .goal-card strong em{font-size:11px}
+  .goal-card b{font-size:13px}
+  .goal-card>span{margin-top:11px;padding:7px;font-size:10px}
+  .promotion-perks{margin-top:18px;gap:10px}
+  .promotion-perks span{padding:8px 14px;font-size:11px}
+  .workspace,.results{margin-top:0;margin-bottom:24px;padding:26px 28px}
+  .section-head{flex-direction:row;align-items:center}
+  .section-head .primary{width:auto;padding:12px 20px}
+  .matrix-help{font-size:12px}
+  .advisor-list{overflow-x:auto}
+  .advisor-matrix{min-width:calc(48px + var(--advisor-count) * 82px)}
+  .tvv-column-head{height:86px}
+  .matrix-corner{height:86px}
+  .matrix-month,.month-name{height:62px}
+  .month-grid{grid-template-columns:repeat(auto-fit,minmax(500px,1fr));gap:12px 16px}
+  .month-row summary{grid-template-columns:54px minmax(0,1fr) 135px 16px;padding:14px 16px}
+  .month-detail{padding:10px 16px}
+  .poster-dialog{width:68vw;max-width:none;max-height:94vh}
+  .poster-view{max-height:calc(94vh - 58px)}
+  .advisor-dialog{width:min(1400px,94vw);max-width:none;height:min(820px,92vh);max-height:92vh;border-radius:24px}
+  .advisor-dialog form{height:100%;max-height:none;padding:0 24px 20px;display:flex;flex-direction:column;overflow:hidden}
+  .advisor-dialog .dialog-head{flex:0 0 auto;margin:0 -24px;padding:20px 26px}
+  .advisor-dialog .dialog-head h2{font-size:24px}
+  .advisor-dialog .name-field{flex:0 0 auto;margin:18px 0 14px}
+  .advisor-dialog .name-field input{height:52px;font-size:16px}
+  .advisor-dialog .month-toolbar{flex:0 0 auto;margin-bottom:10px;padding:0 3px}
+  .advisor-dialog .month-toolbar span{font-size:12px;font-weight:700;color:#445570}
+  .advisor-dialog .month-toolbar button{padding:8px 14px;font-size:11px}
+  .advisor-dialog .dialog-months{flex:1;min-height:0;max-height:none;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));align-content:start;gap:12px;padding:14px;overflow-y:auto;border:1px solid #d8e4f5;background:#eef4fc}
+  .advisor-dialog .contract-toggle{grid-template-columns:78px minmax(0,1fr);grid-template-rows:auto auto auto;gap:8px;padding:12px 11px;border-radius:12px}
+  .advisor-dialog .contract-toggle>label small{font-size:9px}
+  .advisor-dialog .contract-fyp{height:38px}
+  .advisor-dialog .contract-fyp input{height:36px!important;font-size:15px!important}
+  .advisor-dialog .dialog-reward,.advisor-dialog .dialog-productivity,.advisor-dialog .dialog-commission,.advisor-dialog .dialog-quarter,.advisor-dialog .dialog-annual{padding-top:8px}
+  .advisor-dialog .dialog-reward span,.advisor-dialog .dialog-productivity span,.advisor-dialog .dialog-commission span,.advisor-dialog .dialog-quarter span,.advisor-dialog .dialog-annual span,.advisor-dialog .dialog-total span{font-size:10px}
+  .advisor-dialog .dialog-reward b,.advisor-dialog .dialog-productivity b,.advisor-dialog .dialog-commission b,.advisor-dialog .dialog-quarter b,.advisor-dialog .dialog-annual b,.advisor-dialog .dialog-total b{font-size:13px}
+  .advisor-dialog .dialog-actions{flex:0 0 auto;margin-top:14px;padding-top:2px}
+  .advisor-dialog .dialog-actions button{min-width:94px;height:46px}
+  footer{padding:18px 32px 28px}
+}
