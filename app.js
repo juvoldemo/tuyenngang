@@ -1,6 +1,7 @@
 const SIM_MONTHS = 18;
 const DEFAULT_FYP = 15;
 const CONTRACT_FYP = 12;
+const DEFAULT_TEAM_LEADERS = 1;
 const MONTH_TARGETS = [
   { fyp: 25, size: 2, active: 1, reward: 8 },
   { fyp: 35, size: 3, active: 2, reward: 8 },
@@ -114,6 +115,10 @@ function recruitedThrough(endMonth) {
   }).length;
 }
 
+function teamSizeThrough(endMonth) {
+  return DEFAULT_TEAM_LEADERS + recruitedThrough(endMonth);
+}
+
 function findPromotion() {
   for (let completedMonth = 2; completedMonth < SIM_MONTHS; completedMonth += 1) {
     const startMonth = completedMonth - 2;
@@ -211,13 +216,13 @@ function calculate() {
     if (monthIndex < MONTH_TARGETS.length) {
       const target = MONTH_TARGETS[monthIndex];
       month.target = target;
-      month.hit = fyp >= target.fyp && recruited >= target.size && active >= target.active;
+      month.hit = fyp >= target.fyp && teamSizeThrough(monthIndex) >= target.size && active >= target.active;
       month.mgmt = month.hit ? target.reward : 0;
       const cumulativeFyp = monthly.reduce((sum, item) => sum + item.fyp, 0) + fyp;
-      if (monthIndex === 2 && cumulativeFyp >= 100 && recruited >= 4 && active >= 2) {
+      if (monthIndex === 2 && cumulativeFyp >= 100 && teamSizeThrough(monthIndex) >= 4 && active >= 2) {
         month.mgmt = Math.max(month.mgmt, 24 - managementAccumulated);
       }
-      if (monthIndex === 5 && cumulativeFyp >= 250 && recruited >= 6 && active >= 3) {
+      if (monthIndex === 5 && cumulativeFyp >= 250 && teamSizeThrough(monthIndex) >= 6 && active >= 3) {
         month.mgmt = Math.max(month.mgmt, 39 - managementAccumulated);
       }
       managementAccumulated += month.mgmt;
