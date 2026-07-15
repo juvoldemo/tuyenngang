@@ -134,3 +134,119 @@ html{background:#eaf0f9}body{background:linear-gradient(180deg,#fff 0,#f8fbff 10
   .advisor-dialog .dialog-actions button{min-width:94px;height:46px}
   footer{padding:18px 32px 28px}
 }
+
+/* Kiểu chữ dễ đọc khi trình chiếu */
+:root{
+  --text-h1:28px;
+  --text-h2:24px;
+  --text-h3:19px;
+  --text-body:15px;
+  --text-metric:17px;
+  --text-label:12px;
+  --text-caption:11px;
+}
+body{font-size:var(--text-body);line-height:1.5}
+.brand,.primary,.ghost,.dialog-actions button{font-size:var(--text-body)}
+.brand>span:last-child b{font-size:18px}
+.brand small{font-size:12px}
+.eyebrow{font-size:12px}
+.stats strong{font-size:24px}
+.stats span{font-size:12px;line-height:1.3}
+.stats small{font-size:11px;line-height:1.3}
+.section-head h2{font-size:25px}
+.matrix-help,.help{font-size:14px;line-height:1.55}
+.promotion-heading h3{font-size:23px}
+.promotion-heading p{font-size:14px;line-height:1.5}
+.promotion-status .goal-card small{font-size:10px}
+.goal-card strong{font-size:25px}
+.goal-card strong em{font-size:11px}
+.goal-card b{font-size:12px;line-height:1.35}
+.goal-card>span{font-size:10px;line-height:1.35}
+.promotion-perks span{font-size:11px}
+.matrix-corner,.month-name small{font-size:10px}
+.month-name b{font-size:19px}
+.tvv-column-head b{font-size:12px}
+.tvv-column-head small{font-size:10px}
+.matrix-month b{font-size:12px}
+.matrix-month.inactive b{font-size:18px}
+.matrix-month:not(.inactive) b{font-size:20px}
+.month-row summary small{font-size:11px}
+.month-row summary b{font-size:15px}
+.month-row summary>span:first-child b{font-size:20px}
+.month-total b{font-size:17px!important}
+.month-detail>div,.month-detail .reward-poster{font-size:14px}
+.month-detail small,.reward-line>span small{font-size:11px}
+.month-row .next-step>summary>span:first-child b{font-size:16px}
+.next-step-body b,.next-step-body strong,.next-step-body .next-total span{font-size:14px}
+.next-step-body small{font-size:11px}
+.month-expander{font-size:14px}
+.poster-head h2{font-size:19px}
+footer{font-size:13px}
+
+@media(min-width:801px){
+  :root{
+    --text-h1:40px;
+    --text-h2:36px;
+    --text-h3:27px;
+    --text-body:21px;
+    --text-metric:24px;
+    --text-label:18px;
+    --text-caption:16px;
+  }
+  .topbar{height:98px}
+  .brand>span:last-child b{font-size:27px}
+  .brand small{font-size:17px}
+  .topbar .ghost{font-size:19px;padding:12px 17px}
+  .stats article,.stats article.accent{min-height:172px;padding:24px 18px 34px}
+  .stats i{width:54px;height:54px;font-size:27px}
+  .stats strong{font-size:36px}
+  .stats span{font-size:17px}
+  .stats small{font-size:16px}
+  .promotion-heading h3{font-size:36px}
+  .promotion-heading p{font-size:20px}
+  .promotion-status .goal-card small{font-size:16px}
+  .goal-card strong{font-size:41px}
+  .goal-card strong em{font-size:17px}
+  .goal-card b{font-size:19px}
+  .goal-card>span{font-size:16px}
+  .promotion-perks span{font-size:17px}
+  .workspace,.results{padding:34px 38px}
+  .section-head h2{font-size:38px}
+  .eyebrow{font-size:17px}
+  .section-head .primary{font-size:20px;padding:16px 25px}
+  .matrix-help{font-size:19px}
+  .advisor-matrix{min-width:calc(72px + var(--advisor-count) * 122px);grid-template-columns:72px repeat(var(--advisor-count),minmax(122px,1fr))}
+  .matrix-corner,.tvv-column-head{height:116px}
+  .month-name,.matrix-month{height:88px}
+  .matrix-corner,.month-name small{font-size:15px}
+  .month-name b{font-size:29px}
+  .tvv-column-head>span{width:40px;height:40px;font-size:18px}
+  .tvv-column-head b{font-size:18px}
+  .tvv-column-head small{font-size:15px}
+  .matrix-month:not(.inactive) b{font-size:29px}
+  .matrix-month.inactive b{font-size:27px}
+  .month-grid{grid-template-columns:repeat(auto-fit,minmax(720px,1fr));gap:19px 24px}
+  .month-row summary{grid-template-columns:76px minmax(0,1fr) 205px 24px;padding:21px 24px;min-height:92px}
+  .month-row summary small{font-size:16px}
+  .month-row summary b{font-size:21px}
+  .month-row summary>span:first-child b{width:46px;height:46px;font-size:29px}
+  .month-total b{font-size:24px!important}
+  .month-detail{padding:16px 24px}
+  .month-detail>div,.month-detail .reward-poster{font-size:20px;padding-top:12px;padding-bottom:12px}
+  .month-detail small,.reward-line>span small{font-size:16px}
+  .month-row .next-step>summary>span:first-child b{font-size:23px}
+  .next-step-body b,.next-step-body strong,.next-step-body .next-total span{font-size:20px}
+  .next-step-body small{font-size:16px}
+  .advisor-dialog .dialog-head h2{font-size:34px}
+  .advisor-dialog .name-field input{font-size:23px}
+  .advisor-dialog .month-toolbar span{font-size:18px}
+  .advisor-dialog .month-toolbar button{font-size:17px}
+  .advisor-dialog .contract-toggle>label small{font-size:15px}
+  .advisor-dialog .contract-fyp input{font-size:21px!important}
+  .advisor-dialog .contract-fyp span{font-size:14px}
+  .advisor-dialog .dialog-reward span,.advisor-dialog .dialog-productivity span,.advisor-dialog .dialog-commission span,.advisor-dialog .dialog-quarter span,.advisor-dialog .dialog-annual span,.advisor-dialog .dialog-total span{font-size:16px}
+  .advisor-dialog .dialog-reward b,.advisor-dialog .dialog-productivity b,.advisor-dialog .dialog-commission b,.advisor-dialog .dialog-quarter b,.advisor-dialog .dialog-annual b,.advisor-dialog .dialog-total b{font-size:19px}
+  .advisor-dialog .dialog-actions button{font-size:19px}
+  .poster-head h2{font-size:27px}
+  footer{font-size:18px}
+}
