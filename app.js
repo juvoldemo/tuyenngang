@@ -315,8 +315,6 @@ function advisorBenefitLine(label, value, note = '') {
 function renderMonth(month) {
   const statusClass = month.isLeader ? 'leader' : month.hit ? 'hit' : '';
   let detail = rewardLine('Thưởng TVV mới', month.advisorRewards, 'Khoản của TVV, không cộng vào thưởng quản lý', 'poster-tvv-moi.png', true);
-  if (month.advisorProductivity > 0) detail += advisorBenefitLine('Năng suất tháng TVV', month.advisorProductivity, 'Khoản của TVV, không cộng vào thưởng quản lý');
-  if (month.advisorQuarter > 0) detail += advisorBenefitLine('Thưởng Quý TVV', month.advisorQuarter, 'PR15 và tỷ lệ điều chỉnh mặc định đạt tối đa');
   if (month.advisorAnnual > 0) detail += advisorBenefitLine('Thưởng Tháng 13 TVV', month.advisorAnnual, 'Tính theo số quý đạt thưởng trong năm đầu');
   if (month.isLeader) {
     if (month.monthIndex < MONTH_TARGETS.length) detail += rewardLine('Quản lý khởi nghiệp', month.mgmt, 'Bảo lưu đến hết tháng làm việc thứ 6', 'poster-quan-ly-khoi-nghiep.png');
@@ -395,9 +393,8 @@ window.openAdvisorDialog = (index = null) => {
     const quarter = tvvQuarterReward(advisor, monthIndex);
     const annual = monthIndex === 12 ? tvvAnnualReward(advisor) : 0;
     const totalIncome = commission + reward + productivity + quarter + annual;
-    const quarterRow = (monthIndex + 1) % 3 === 0 ? `<div class="dialog-quarter"><span>Thưởng Quý TVV</span><b>${number(quarter)}</b></div>` : '';
     const annualRow = monthIndex === 12 ? `<div class="dialog-annual"><span>Thưởng Tháng 13</span><b>${number(annual)}</b></div>` : '';
-    return `<div class="contract-toggle"><label><input class="dialog-contract" type="checkbox" ${active ? 'checked' : ''} onchange="toggleContractFyp(this);updateSelectAllButton()"><span><small>THÁNG ${monthIndex + 1}</small></span></label><div class="contract-fyp"><input type="text" inputmode="decimal" value="${month.fyp > 0 ? month.fyp : DEFAULT_FYP}" ${active ? '' : 'disabled'} oninput="updateDialogMonthReward(this)"></div><div class="dialog-reward"><span>Thưởng TVV mới</span><b>${number(reward)}</b></div><div class="dialog-productivity"><span>Năng suất tháng</span><b>${number(productivity)}</b></div><div class="dialog-commission"><span>Hoa hồng FYC 30% FYP</span><b>${number(commission)}</b></div>${quarterRow}${annualRow}<div class="dialog-total"><span>Tổng thu nhập TVV</span><b>${number(totalIncome)}</b></div></div>`;
+    return `<div class="contract-toggle"><label><input class="dialog-contract" type="checkbox" ${active ? 'checked' : ''} onchange="toggleContractFyp(this);updateSelectAllButton()"><span><small>THÁNG ${monthIndex + 1}</small></span></label><div class="contract-fyp"><input type="text" inputmode="decimal" value="${month.fyp > 0 ? month.fyp : DEFAULT_FYP}" ${active ? '' : 'disabled'} oninput="updateDialogMonthReward(this)"></div><div class="dialog-reward"><span>Thưởng TVV mới</span><b>${number(reward)}</b></div><div class="dialog-commission"><span>Hoa hồng FYC 30% FYP</span><b>${number(commission)}</b></div>${annualRow}<div class="dialog-total"><span>Tổng thu nhập TVV</span><b>${number(totalIncome)}</b></div></div>`;
   }).join('');
   updateSelectAllButton();
   document.querySelector('#advisorDialog').showModal();
@@ -422,10 +419,7 @@ window.updateDialogMonthReward = () => {
   };
   cells.forEach((cell, monthIndex) => {
     cell.querySelector('.dialog-reward b').textContent = number(tvvMonthReward(temp, monthIndex));
-    cell.querySelector('.dialog-productivity b').textContent = number(tvvProductivityReward(temp, monthIndex));
     cell.querySelector('.dialog-commission b').textContent = number(effectiveFyp(temp, monthIndex) * 0.3);
-    const quarter = cell.querySelector('.dialog-quarter b');
-    if (quarter) quarter.textContent = number(tvvQuarterReward(temp, monthIndex));
     const annual = cell.querySelector('.dialog-annual b');
     if (annual) annual.textContent = number(tvvAnnualReward(temp));
     const total = effectiveFyp(temp, monthIndex) * 0.3
